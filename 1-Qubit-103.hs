@@ -1,6 +1,7 @@
 -- ======================================================================
 -- Quantum Programming Series with Quipper by Oscar Riveros
 -- Schrodinger's cat alive!
+-- http://www.scribd.com/doc/174494333/Schrodinger%E2%80%99s-cat-alive
 -- ======================================================================
 
 import Quipper
