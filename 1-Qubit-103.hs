@@ -20,11 +20,10 @@ eru qlive qdeath  = do
 	label qdeath "God's dice"
 	label qlive "God's dice"
 	qnot_at live `controlled` [qlive, qdeath]
-	qnot_at death `controlled` [qdeath, qlive]
-	label live "Cat Live!"		
-	live <- qnot live `controlled` death
+	qnot_at death `controlled` [qdeath, qlive]		
+	livedeath <- qnot live `controlled` death
 	qdiscard [death,qlive,qdeath]
-	return live
+	return livedeath
 
 limbus :: QDInt -> QDInt -> Circ [Qubit]
 limbus live death = do
@@ -32,8 +31,8 @@ limbus live death = do
 	label qlive "Live"
  	let qdeath = qulist_of_qdint_lh death
  	label qlive "Death"
- 	live <- zipWithM eru qlive qdeath 
- 	return (map (\(nothing) -> nothing) live)
+ 	livedeath <- zipWithM eru qlive qdeath 
+ 	return (map (\(nothing) -> nothing) livedeath)
 
 schrodingers_cat :: [Qubit] -> Circ [Qubit]
 schrodingers_cat xs = do
