@@ -10,69 +10,68 @@ import QuipperLib.Arith
 import Control.Monad (zipWithM)
 
 eru :: Qubit -> Qubit -> Circ Qubit
-eru qlive qdeath  = do
-	live <- qinit True
-	death <- qinit False
-	label death "There was Eru, the One."
-	label live "There was Eru, the Zero."
-	qdeath <- qnot qdeath
-	qlive <- qnot qlive
-	label qdeath "God's dice"
-	label qlive "God's dice"
-	qnot_at live `controlled` [qlive, qdeath]
-	qnot_at death `controlled` [qdeath, qlive]		
-	livedeath <- qnot live `controlled` death
-	qdiscard [death,qlive,qdeath]
-	return livedeath
+eru qlive qdeath  	= do
+	live 			<- qinit True
+	death 			<- qinit False
+	label 			live "There was Eru, the One."
+	qdeath 			<- qnot qdeath
+	qlive 			<- qnot qlive
+	label 			qdeath "God's dice"
+	label 			qlive "God's dice"
+	qnot_at 		live `controlled` [qlive, qdeath]
+	qnot_at 		death `controlled` [qdeath, qlive]		
+	livedeath		 <- qnot live `controlled` death
+	qdiscard 		[death,qlive,qdeath]
+	return 			livedeath
 
 limbus :: QDInt -> QDInt -> Circ [Qubit]
-limbus live death = do
-	let qlive = qulist_of_qdint_lh live
-	label qlive "Live"
- 	let qdeath = qulist_of_qdint_lh death
- 	label qlive "Death"
- 	livedeath <- zipWithM eru qlive qdeath 
- 	return (map (\(nothing) -> nothing) livedeath)
+limbus live death 	= do
+	let qlive 		= qulist_of_qdint_lh live
+	label qlive 	"Live"
+ 	let qdeath 		= qulist_of_qdint_lh death
+ 	label qlive 	"Death"
+ 	livedeath 		<- zipWithM eru qlive qdeath 
+ 	return 			(map (\(nothing) -> nothing) livedeath)
 
 schrodingers_cat :: [Qubit] -> Circ [Qubit]
 schrodingers_cat xs = do
-	let cat = qdint_of_qulist_lh xs
-	label cat "Cat IN Limbus"
-	(live,death) <- q_negate cat
-	qcat <- limbus live death
-	label qcat "Cat OUT Limbus"	
-	return qcat
+	let cat 		= qdint_of_qulist_lh xs
+	label 			cat "Cat IN Limbus"
+	(live,death) 	<- q_negate cat
+	qcat 			<- limbus live death
+	label 			qcat "Cat OUT Limbus"	
+	return 			qcat
 
 black_box :: String -> Circ [Bit]
-black_box scat  = do
-	qcat <- qinit_of_string scat
-	label qcat "Cat IN Box"
-	cats <- schrodingers_cat qcat
-	label cats "Cat OUT Box"
-	cats' <- measure cats
-	return cats'
+black_box scat  	= do
+	qcat 			<- qinit_of_string scat
+	label 			qcat "Cat IN Box"
+	cats 			<- schrodingers_cat qcat
+	label 			cats "Cat OUT Box"
+	cats' 			<- measure cats
+	return 			cats'
 
 main :: IO ()
 main = do
-	print_generic Preview black_box "1001"
+	print_generic 	Preview black_box "1001"
 	-- Cat State Nº 1
-	out <- run_generic_io db black_box cat1
-	putStrLn ("Cat In State Nº 1 Is Alive? = " ++ show out)
+	out 			<- run_generic_io db black_box cat1
+	putStrLn 		("Cat In State Nº 1 Is Alive? = " ++ show out)
 	-- Cat State Nº 2
-	out <- run_generic_io db black_box cat2
-	putStrLn ("Cat In State Nº 2 Is Alive? = " ++ show out)
+	out 			<- run_generic_io db black_box cat2
+	putStrLn		("Cat In State Nº 2 Is Alive? = " ++ show out)
 	-- Cat State Nº 3
-	out <- run_generic_io db black_box cat3
-	putStrLn ("Cat In State Nº 3 Is Alive? = " ++ show out)
+	out 			<- run_generic_io db black_box cat3
+	putStrLn 		("Cat In State Nº 3 Is Alive? = " ++ show out)
 	-- Cat State Nº 4
-	out <- run_generic_io db black_box cat4
-	putStrLn ("Cat In State Nº 4 Is Alive? = " ++ show out)
+	out 			<- run_generic_io db black_box cat4
+	putStrLn 		("Cat In State Nº 4 Is Alive? = " ++ show out)
 	-- Cat State Nº 5
-	out <- run_generic_io db black_box cat5
-	putStrLn ("Cat In State Nº 5 Is Alive? = " ++ show out)
+	out 			<- run_generic_io db black_box cat5
+	putStrLn		 ("Cat In State Nº 5 Is Alive? = " ++ show out)
 	-- Cat State Nº 6
-	out <- run_generic_io db black_box cat6
-	putStrLn ("Cat In State Nº 6 Is Alive? = " ++ show out)
+	out 			<- run_generic_io db black_box cat6
+	putStrLn 		("Cat In State Nº 6 Is Alive? = " ++ show out)
 	where
 		db :: Double
 		db = undefined
