@@ -52,7 +52,7 @@ black_box scat  		= do
 	return 			cats'
 
 main :: IO ()
-mai				 = do
+main				 = do
 	print_generic 		Preview black_box "1001"
 	-- Cat State Nº 1
 	out 			<- run_generic_io db black_box cat1
