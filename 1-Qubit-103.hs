@@ -13,7 +13,7 @@ eru :: Qubit -> Qubit -> Circ Qubit
 eru qlive qdeath  = do
 	live <- qinit True
 	death <- qinit False
-	label live "There was Eru, the One."
+	label death "There was Eru, the One."
 	label live "There was Eru, the Zero."
 	qdeath <- qnot qdeath
 	qlive <- qnot qlive
