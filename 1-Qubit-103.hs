@@ -10,7 +10,7 @@ import QuipperLib.Arith
 import Control.Monad (zipWithM)
 
 eru :: Qubit -> Qubit -> Circ Qubit
-eru qlive qdeath  	= do
+eru qlive qdeath  		= do
 	live 			<- qinit True
 	death 			<- qinit False
 	label 			live "There was Eru, the One."
@@ -25,25 +25,25 @@ eru qlive qdeath  	= do
 	return 			livedeath
 
 limbus :: QDInt -> QDInt -> Circ [Qubit]
-limbus live death 	= do
+limbus live death 		= do
 	let qlive 		= qulist_of_qdint_lh live
-	label qlive 	"Live"
+	label qlive 		"Live"
  	let qdeath 		= qulist_of_qdint_lh death
- 	label qlive 	"Death"
+ 	label qlive 		"Death"
  	livedeath 		<- zipWithM eru qlive qdeath 
  	return 			(map (\(nothing) -> nothing) livedeath)
 
 schrodingers_cat :: [Qubit] -> Circ [Qubit]
-schrodingers_cat xs = do
+schrodingers_cat xs 		= do
 	let cat 		= qdint_of_qulist_lh xs
 	label 			cat "Cat IN Limbus"
-	(live,death) 	<- q_negate cat
+	(live,death) 		<- q_negate cat
 	qcat 			<- limbus live death
 	label 			qcat "Cat OUT Limbus"	
 	return 			qcat
 
 black_box :: String -> Circ [Bit]
-black_box scat  	= do
+black_box scat  		= do
 	qcat 			<- qinit_of_string scat
 	label 			qcat "Cat IN Box"
 	cats 			<- schrodingers_cat qcat
@@ -52,8 +52,8 @@ black_box scat  	= do
 	return 			cats'
 
 main :: IO ()
-main = do
-	print_generic 	Preview black_box "1001"
+mai				 = do
+	print_generic 		Preview black_box "1001"
 	-- Cat State Nº 1
 	out 			<- run_generic_io db black_box cat1
 	putStrLn 		("Cat In State Nº 1 Is Alive? = " ++ show out)
